@@ -137,17 +137,18 @@ def process_frame_v2(temp_frame: Frame, temp_frame_path: str = "") -> Frame:
 
     elif is_video(modules.globals.target_path):
         if modules.globals.many_faces:
-            source_face = default_source_face()
             for map in modules.globals.source_target_map:
-                target_frame = [
-                    f
-                    for f in map["target_faces_in_frame"]
-                    if f["location"] == temp_frame_path
-                ]
+                if "source" in map:
+                    source_face = map["source"]["face"]
+                    target_frame = [
+                        f
+                        for f in map["target_faces_in_frame"]
+                        if f["location"] == temp_frame_path
+                    ]
 
-                for frame in target_frame:
-                    for target_face in frame["faces"]:
-                        temp_frame = swap_face(source_face, target_face, temp_frame)
+                    for frame in target_frame:
+                        for target_face in frame["faces"]:
+                            temp_frame = swap_face(source_face, target_face, temp_frame)
 
         elif not modules.globals.many_faces:
             for map in modules.globals.source_target_map:
