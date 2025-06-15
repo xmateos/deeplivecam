@@ -123,10 +123,22 @@ def get_temp_frame_paths(target_path: str) -> List[str]:
     return glob.glob((os.path.join(glob.escape(temp_directory_path), "*.png")))
 
 
+def get_temp_source_frame_paths(target_path: str) -> List[str]:
+    temp_directory_path = get_temp_directory_path(target_path)
+    temp_directory_path_for_sources = os.path.join(temp_directory_path, "sources")
+    return glob.glob((os.path.join(glob.escape(temp_directory_path_for_sources), "*.png")))
+
+
 def get_temp_directory_path(target_path: str) -> str:
     target_name, _ = os.path.splitext(os.path.basename(target_path))
     target_directory_path = os.path.dirname(target_path)
     return os.path.join(target_directory_path, TEMP_DIRECTORY, target_name)
+
+
+def get_temp_source_directory_path(target_path: str) -> str:
+    target_name, _ = os.path.splitext(os.path.basename(target_path))
+    target_directory_path = os.path.dirname(target_path)
+    return os.path.join(target_directory_path, TEMP_DIRECTORY, target_name, "sources")
 
 
 def get_temp_output_path(target_path: str) -> str:

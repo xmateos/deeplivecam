@@ -442,6 +442,12 @@ def create_source_target_popup(
     for item in map:
         id = item["id"]
 
+        try:
+            image = Image.fromarray(cv2.cvtColor(item["target"]["cv2"], cv2.COLOR_BGR2RGB))
+        except Exception as e:
+            print("❌ Error while creating image, skipping:", type(e), e)
+            continue
+
         button = ctk.CTkButton(
             scrollable_frame,
             text=_("Select source image"),
@@ -459,7 +465,6 @@ def create_source_target_popup(
         )
         x_label.grid(row=id, column=2, padx=10, pady=10)
 
-        image = Image.fromarray(cv2.cvtColor(item["target"]["cv2"], cv2.COLOR_BGR2RGB))
         image = image.resize(
             (MAPPER_PREVIEW_MAX_WIDTH, MAPPER_PREVIEW_MAX_HEIGHT), Image.LANCZOS
         )
