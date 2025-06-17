@@ -62,6 +62,7 @@ def detect_fps(target_path: str) -> float:
 
 def extract_frames(target_path: str) -> None:
     temp_directory_path = get_temp_directory_path(target_path)
+    temp_directory_path = get_temp_source_directory_path(target_path)
     run_ffmpeg(
         [
             "-i",
@@ -124,8 +125,7 @@ def get_temp_frame_paths(target_path: str) -> List[str]:
 
 
 def get_temp_source_frame_paths(target_path: str) -> List[str]:
-    temp_directory_path = get_temp_directory_path(target_path)
-    temp_directory_path_for_sources = os.path.join(temp_directory_path, "sources")
+    temp_directory_path_for_sources = os.path.join(get_temp_directory_path(target_path), "sources")
     return glob.glob((os.path.join(glob.escape(temp_directory_path_for_sources), "*.png")))
 
 
@@ -136,9 +136,7 @@ def get_temp_directory_path(target_path: str) -> str:
 
 
 def get_temp_source_directory_path(target_path: str) -> str:
-    target_name, _ = os.path.splitext(os.path.basename(target_path))
-    target_directory_path = os.path.dirname(target_path)
-    return os.path.join(target_directory_path, TEMP_DIRECTORY, target_name, "sources")
+    return os.path.join(get_temp_directory_path(target_path), "sources")
 
 
 def get_temp_output_path(target_path: str) -> str:
@@ -159,6 +157,11 @@ def normalize_output_path(source_path: str, target_path: str, output_path: str) 
 
 def create_temp(target_path: str) -> None:
     temp_directory_path = get_temp_directory_path(target_path)
+    Path(temp_directory_path).mkdir(parents=True, exist_ok=True)
+
+
+def create_source_temp(target_path: str) -> None:
+    temp_directory_path = get_temp_source_directory_path(target_path)
     Path(temp_directory_path).mkdir(parents=True, exist_ok=True)
 
 

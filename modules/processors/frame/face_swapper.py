@@ -231,7 +231,8 @@ def process_frames(
             temp_frame = cv2.imread(temp_frame_path)
             try:
                 result = process_frame_v2(temp_frame, temp_frame_path)
-                cv2.imwrite(temp_frame_path, result)
+                #cv2.imwrite(temp_frame_path, result)
+                cv2.imwrite(temp_frame_path.replace("sources\\", ""), result)
             except Exception as exception:
                 print(exception)
                 pass

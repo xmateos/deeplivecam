@@ -2,7 +2,6 @@ import os
 import shutil
 from typing import Any
 import insightface
-from modules.face_analyser_unlimited import FaceAnalysisUnlimited
 import json
 import pickle
 import dill
@@ -14,7 +13,7 @@ import modules.globals
 from tqdm import tqdm
 from modules.typing import Frame
 from modules.cluster_analysis import find_cluster_centroids, find_closest_centroid
-from modules.utilities import get_temp_directory_path, create_temp, extract_frames, clean_temp, get_temp_frame_paths
+from modules.utilities import get_temp_directory_path, get_temp_source_directory_path, create_temp, create_source_temp, extract_frames, clean_temp, get_temp_frame_paths, get_temp_source_frame_paths
 from pathlib import Path
 
 FACE_ANALYSER = None
@@ -24,10 +23,9 @@ def get_face_analyser() -> Any:
     global FACE_ANALYSER
 
     if FACE_ANALYSER is None:
-        #FACE_ANALYSER = insightface.app.FaceAnalysis(name='buffalo_l', providers=modules.globals.execution_providers)
-        FACE_ANALYSER = FaceAnalysisUnlimited(name='buffalo_l', providers=modules.globals.execution_providers)
-        #FACE_ANALYSER.prepare(ctx_id=0, det_size=(640, 640))
-        FACE_ANALYSER.prepare(ctx_id=0, det_size=(640, 640), det_thresh=0.3)
+        FACE_ANALYSER = insightface.app.FaceAnalysis(name='buffalo_l', providers=modules.globals.execution_providers)
+        FACE_ANALYSER.prepare(ctx_id=0, det_size=(640, 640))
+        #FACE_ANALYSER.prepare(ctx_id=0, det_size=(1920, 1920), det_thresh=0.1)
     return FACE_ANALYSER
 
 
@@ -151,10 +149,12 @@ def get_unique_faces_from_target_video() -> Any:
             print('🧪 No cache found. Creating temp resources...')
             clean_temp(modules.globals.target_path)
             create_temp(modules.globals.target_path)
+            create_source_temp(modules.globals.target_path)
             print('Extracting frames...')
             extract_frames(modules.globals.target_path)
 
-            temp_frame_paths = get_temp_frame_paths(modules.globals.target_path)
+            #temp_frame_paths = get_temp_frame_paths(modules.globals.target_path)
+            temp_frame_paths = get_temp_source_frame_paths(modules.globals.target_path)
 
             i = 0
             for temp_frame_path in tqdm(temp_frame_paths, desc="Extracting face embeddings from frames"):
