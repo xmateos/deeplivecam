@@ -39,7 +39,7 @@ def get_one_face(frame: Frame) -> Any:
 
 def get_many_faces(frame: Frame) -> Any:
     try:
-        return get_face_analyser().get(frame, max_num=0)  # 0 = sin límite
+        return get_face_analyser().get(frame)
     except IndexError:
         return None
 
