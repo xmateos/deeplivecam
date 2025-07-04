@@ -184,7 +184,9 @@ def get_unique_faces_from_target_video() -> Any:
     #        except Exception as e:
     #            print("❌ Pickle failed:", type(e), e)
 
-            centroids = find_cluster_centroids(face_embeddings)
+            #centroids = find_cluster_centroids(face_embeddings)
+            # Increase detections with new function
+            centroids = find_cluster_centroids(face_embeddings, max_k=10, elbow_tolerance=0.05)
 
             for frame in frame_face_embeddings:
                 for face in frame['faces']:
@@ -231,7 +233,8 @@ def get_unique_faces_from_target_video() -> Any:
             with open(cache_file, "w") as f:
                 json.dump(serializable_map, f, indent=2)
 
-        # dump_faces(centroids, frame_face_embeddings)
+            #dump_faces(centroids, frame_face_embeddings)
+
         default_target_face()
     except ValueError:
         return None

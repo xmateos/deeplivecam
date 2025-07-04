@@ -287,7 +287,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     mouth_mask_var = ctk.BooleanVar(value=modules.globals.mouth_mask)
     mouth_mask_switch = ctk.CTkSwitch(
         root,
-        text=_("Mouth Mask"),
+        text=_("Mouth Mask (target rules)"),
         variable=mouth_mask_var,
         cursor="hand2",
         command=lambda: setattr(modules.globals, "mouth_mask", mouth_mask_var.get()),
@@ -446,6 +446,7 @@ def create_source_target_popup(
             image = Image.fromarray(cv2.cvtColor(item["target"]["cv2"], cv2.COLOR_BGR2RGB))
         except Exception as e:
             print("❌ Error while creating image, skipping:", type(e), e)
+            print("❌ Try command: ffmpeg -i /path/to/video.mp4 -vf \"scale=1280:-2\" -pix_fmt yuv420p -c:v libx264 -preset fast -crf 18 -c:a copy /path/to/fixed_video.mp4")
             continue
 
         button = ctk.CTkButton(

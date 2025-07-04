@@ -123,10 +123,12 @@ def process_frame(source_face: Face, temp_frame: Frame) -> Frame:
 def process_frame_v2(temp_frame: Frame, temp_frame_path: str = "") -> Frame:
     if is_image(modules.globals.target_path):
         if modules.globals.many_faces:
-            source_face = default_source_face()
+            #source_face = default_source_face()
             for map in modules.globals.source_target_map:
-                target_face = map["target"]["face"]
-                temp_frame = swap_face(source_face, target_face, temp_frame)
+                if "source" in map:
+                    source_face = map["source"]["face"]
+                    target_face = map["target"]["face"]
+                    temp_frame = swap_face(source_face, target_face, temp_frame)
 
         elif not modules.globals.many_faces:
             for map in modules.globals.source_target_map:
@@ -248,8 +250,11 @@ def process_image(source_path: str, target_path: str, output_path: str) -> None:
         cv2.imwrite(output_path, result)
     else:
         if modules.globals.many_faces:
+            # update_status(
+            #    "Many faces enabled. Using first source image. Progressing...", NAME
+            # )
             update_status(
-                "Many faces enabled. Using first source image. Progressing...", NAME
+                "Many faces enabled. Progressing...", NAME
             )
         target_frame = cv2.imread(output_path)
         result = process_frame_v2(target_frame)
